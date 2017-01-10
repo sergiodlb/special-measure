@@ -1,7 +1,7 @@
 function [val, rate] = smcKeithley2400(ico, val, rate)
 % driver for Keithley 2400 SourceMeter
 % currently just to supply and monitor components, experimental & incomlete
-% 	SMCKEITHLEY2400([ico(1) ico(2) ico(3)] val, rate)
+% 	SMCKEITHLEY2400([ico(1) ico(2) ico(3)], val, rate)
 % 		ico(1): instrument number in rack
 % 		ico(2): channel on instrument 1 =VOLT
 %                                     2 =CURRENT, 
@@ -15,6 +15,10 @@ function [val, rate] = smcKeithley2400(ico, val, rate)
 % no ...
 % only dc voltage/current measure/source
 % written by eugen.kammerloher@rwth-aachen.de
+% 
+% edits by Sergio de la Barrera:
+% - added (6) measured RESISTANCE channel
+% - added (7) Get 2-wire/4-wire mode channel
 
 global smdata;
 
@@ -127,7 +131,39 @@ switch ico(2)
 
 			otherwise
 				error('Operation not supported');
-		end
+        end
+        
+    case 6 % (added by Sergio) measure resistance
+        switch ico(3)
+            case 0 % get resistance
+                % switch Ohm mode to manual
+                fprintf(smdata.inst(ico(1)).data.inst, ':SENS:RES:MODE MAN')
+                % slow but simple
+				fprintf(smdata.inst(ico(1)).data.inst, ':SENS:RES:RANG:AUTO ON');
+				% set remote output format to resistance only
+				fprintf(smdata.inst(ico(1)).data.inst, ':FORM:ELEM RES');
+				val = query(smdata.inst(ico(1)).data.inst,  ':READ?', '%s\n', '%f');
+                
+            case 1
+                error('Cannot set measured resistance');
+            
+            otherwise
+                error('Operation not supported');
+                
+        end
+
+    case 7 % (added by Sergio) testing 2-wire/4-wire mode
+        switch ico(3)
+            case 0 % get value: 1=ON=4-wire mode, 0=OFF=2-wire mode
+                val = query(smdata.inst(ico(1)).data.inst,  'SYST:RSEN?', '%s\n', '%d');
+                
+            case 1
+                error('Set 2-wire/4-wire not implemented');
+            
+            otherwise
+                error('Operation not supported');
+                
+        end
 
 	otherwise
 		%error('Operation not supported');
