@@ -114,14 +114,16 @@ sensindex = find(sensvals >= sensval,1)-1;
 function val = SR860tauvalue(tauindex)
 % converts an index to the corresponding sensitivity value for the SR860
 % lockin.
-x = [10e-6 30e-6];
-tauvals = [x 1e1*x 1e2*x 1e3*x 1e4*x 1e5*x 1e6*x 1e7*x 1e8*x 1e9*x];
+x = [1e-6 3e-6];
+tauvals = [x 1e1*x 1e2*x 1e3*x 1e4*x 1e5*x 1e6*x 1e7*x 1e8*x 1e9*x 1e10*x];
 val = tauvals(tauindex+1);
 
 function tauindex = SR860tauindex(tauval)
 % converts a time constant to a corresponding index that can be sent to the
 % SR860 lockin.  rounds up (tau = 240 will become 300)
-x = [10e-6 30e-6];
-tauvals = [x 1e1*x 1e2*x 1e3*x 1e4*x 1e5*x 1e6*x 1e7*x 1e8*x 1e9*x];
-tauindex = find(tauvals >= tauval,1)-1;
+x = [1e-6 3e-6];
+tauvals = [x 1e1*x 1e2*x 1e3*x 1e4*x 1e5*x 1e6*x 1e7*x 1e8*x 1e9*x 1e10*x];
+% tauindex = find(tauvals >= tauval,1)-1;
+[~, tauvalsindex] = min(abs(tauvals - tauval)); % this is much better; handles floating-point errors
+tauindex = tauvalsindex - 1;
         
