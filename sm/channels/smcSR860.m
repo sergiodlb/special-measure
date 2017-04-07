@@ -14,7 +14,7 @@ global smdata;
 
 cmds = {'OUTP 0', 'OUTP 1', 'OUTP 2', 'OUTP 3', 'FREQ', 'SLVL', ...
     'OAUX 1', 'OAUX 2', 'OAUX 3', 'OAUX 4', 'AUXV 1', 'AUXV 2', 'AUXV 3', 'AUXV 4' ...
-    ,'','','SENS', 'OFLT', 'SYNC', 'SNAP 0,1'};
+    ,'','','SCAL', 'OFLT', 'SYNC', 'SNAP 0,1'};
 
 switch ic(2) % Channel
     case {15, 16} % stored data, length determined by datadim
@@ -100,16 +100,17 @@ end
 function val = SR860sensvalue(sensindex)
 % converts an index to the corresponding sensitivity value for the SR860
 % lockin.
-x = [2e-9 5e-9 10e-9];
-sensvals = [x 1e1*x 1e2*x 1e3*x 1e4*x 1e5*x 1e6*x 1e7*x 1e8*x 1e9*x];
+x = [5e-9 2e-9 1e-9];
+sensvals = [1e0 1e8*x 1e7*x 1e6*x 1e5*x 1e4*x 1e3*x 1e2*x 1e1*x x];
 val = sensvals(sensindex+1);
 
 function sensindex = SR860sensindex(sensval)
 % converts a sensitivity to a corresponding index that can be sent to the
 % SR860 lockin.  rounds up (sens = 240 will become 500)
-x = [2e-9 5e-9 10e-9];
-sensvals = [x 1e1*x 1e2*x 1e3*x 1e4*x 1e5*x 1e6*x 1e7*x 1e8*x 1e9*x];
-sensindex = find(sensvals >= sensval,1)-1;
+x = [5e-9 2e-9 1e-9];
+sensvals = [1e0 1e8*x 1e7*x 1e6*x 1e5*x 1e4*x 1e3*x 1e2*x 1e1*x x];
+[~, sensvalsindex] = min(abs(sensvals - sensval)); % this is much better; handles floating-point errors
+sensindex = sensvalsindex - 1;
 
 function val = SR860tauvalue(tauindex)
 % converts an index to the corresponding sensitivity value for the SR860
