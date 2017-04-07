@@ -72,6 +72,16 @@ switch ic(2) % Channel
                 
         end
         
+    case 20 % SNAP
+        switch ic(3)
+            case 0 % get
+                % SNAP does not work using below code due to format of SNAP
+                % output, which is comma-delimited string, not '%s\n %f'
+                val = query(smdata.inst(ic(1)).data.inst, sprintf('%s? %s',...
+                    cmds{ic(2)}(1:4), cmds{ic(2)}(5:end)), '%s\n', '%f,%f');
+            otherwise
+                error('Operation not supported');
+        end
     otherwise
         switch ic(3) % action
             case 1 % set
@@ -82,8 +92,6 @@ switch ic(2) % Channel
                 end
                 fprintf(smdata.inst(ic(1)).data.inst, sprintf('%s %f', cmds{ic(2)}, val));
             case 0 % get
-                % SNAP does not work using below code due to format of SNAP
-                % output, which is comma-delimited string, not '%s\n %f'
                 val = query(smdata.inst(ic(1)).data.inst, sprintf('%s? %s',...
                     cmds{ic(2)}(1:4), cmds{ic(2)}(5:end)), '%s\n', '%f');
                 if ic(2)==17
