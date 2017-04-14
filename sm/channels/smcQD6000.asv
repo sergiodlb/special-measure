@@ -33,8 +33,6 @@ switch ico(2)
 				parsed = sscanf(response, '%d,%f,%f;');
 				val = parsed(3);
             case 1 % set temperature
-                if nargin < 3
-                    rate = 20.0; %[K/min]
                 formatSpec = 'TEMP %.4f %.4f 0';
                 fprintf(smdata.inst(ico(1)).data.inst, formatSpec, val, rate);
                 pause(0.25)
@@ -52,12 +50,12 @@ switch ico(2)
                 response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4');
 				parsed = sscanf(response, '%d,%f,%f;');
 				val = parsed(3);
-%             case 1 % set persistent field
-%                 %formatSpec = 'FIELD %6.2f %6.3f 0 0';
-%                 formatSpec = 'FIELD %6.2f 11.0 0 0'; % FIXME - this is a hack until we can figure out two args for smset
-%                 fprintf(smdata.inst(ico(1)).data.inst, formatSpec, val);
-%                 pause(0.25)
-%                 fprintf(smdata.inst(ico(1)).data.inst, formatSpec, val);
+            case 1 % set persistent field
+                %formatSpec = 'FIELD %6.2f %6.3f 0 0';
+                formatSpec = 'FIELD %6.2f 11.0 0 0'; % FIXME - this is a hack until we can figure out two args for smset
+                fprintf(smdata.inst(ico(1)).data.inst, formatSpec, val);
+                pause(0.25)
+                fprintf(smdata.inst(ico(1)).data.inst, formatSpec, val);
             otherwise
                 error('Operation not supported');
         end
@@ -72,10 +70,8 @@ switch ico(2)
 				parsed = sscanf(response, '%d,%f,%f;');
 				val = parsed(3);
             case 1 % set driven field
-                if nargin < 3
-                    rate = 80.0; %[Oe/s]
-                formatSpec = 'FIELD %.4f %.4f 0 1';
-                fprintf(smdata.inst(ico(1)).data.inst, formatSpec, val, rate);
+                formatSpec = 'FIELD %6.2f 80.0 0 1'; % FIXME - this is a hack until we can figure out two args for smset
+                fprintf(smdata.inst(ico(1)).data.inst, formatSpec, val);
             otherwise
                 error('Operation not supported');
         end
