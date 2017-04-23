@@ -35,10 +35,11 @@ switch ico(2)
             case 1 % set temperature
                 if nargin < 3
                     rate = 20.0; %[K/min]
-                formatSpec = 'TEMP %.4f %.4f 0';
-                fprintf(smdata.inst(ico(1)).data.inst, formatSpec, val, rate);
+                end
+                formatSpec = 'TEMP %.4f 20.0 0';
+                fprintf(smdata.inst(ico(1)).data.inst, formatSpec, val);
                 pause(0.25)
-                fprintf(smdata.inst(ico(1)).data.inst, formatSpec, val, rate);
+                fprintf(smdata.inst(ico(1)).data.inst, formatSpec, val);
             otherwise
                 error('Operation not supported');
         end    
@@ -73,9 +74,10 @@ switch ico(2)
 				val = parsed(3);
             case 1 % set driven field
                 if nargin < 3
-                    rate = 80.0; %[Oe/s]
-                formatSpec = 'FIELD %.4f %.4f 0 1';
-                fprintf(smdata.inst(ico(1)).data.inst, formatSpec, val, rate);
+                    rate = 190; %[Oe/s]
+                end
+                formatSpec = 'FIELD %.4f 190 0 1';
+                fprintf(smdata.inst(ico(1)).data.inst, formatSpec, val);
             otherwise
                 error('Operation not supported');
         end
