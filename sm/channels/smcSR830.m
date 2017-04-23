@@ -22,10 +22,13 @@ switch ic(2) % Channel
                 npts = smdata.inst(ic(1)).datadim(ic(2), 1);
                 while 1
                     navail = query(smdata.inst(ic(1)).data.inst, 'SPTS?', '%s\n', '%d');
+                    % not sure which of the below two code blocks are correct; lines written by someone else and caused error when I used this function
                     if navail >= npts + smdata.inst(ic(1)).data.currsamp;
                         break;
                     else
                         pause(0.8 * (npts + smdata.inst(ic(1)).data.currsamp - navail) ...
+                            * smdata.inst(ic(1)).data.sampint);% added this line to prevent runtime error
+                    end
                     
 					if navail >= npts + smdata.inst(ic(1)).data.currsamp(ic(2)-14);
                         break;
@@ -100,30 +103,28 @@ switch ic(2) % Channel
 end
 
 function val = SR830sensvalue(sensindex)
-% converts an index to the corresponding sensitivity value for the SR830
-% lockin.
+% converts an index to the corresponding sensitivity value for the SR830 lockin
 x = [2e-9 5e-9 10e-9];
 sensvals = [x 1e1*x 1e2*x 1e3*x 1e4*x 1e5*x 1e6*x 1e7*x 1e8*x 1e9*x];
 val = sensvals(sensindex+1);
 
 function sensindex = SR830sensindex(sensval)
-% converts a sensitivity to a corresponding index that can be sent to the
-% SR830 lockin.  rounds up (sens = 240 will become 500)
+% converts a sensitivity to a corresponding index that can be sent to the SR830 lockin
 x = [2e-9 5e-9 10e-9];
 sensvals = [x 1e1*x 1e2*x 1e3*x 1e4*x 1e5*x 1e6*x 1e7*x 1e8*x 1e9*x];
-sensindex = find(sensvals >= sensval,1)-1;
+[~, sensvalsindex] = min(abs(sensvals - sensval));
+sensindex = sensvalsindex - 1;
 
 function val = SR830tauvalue(tauindex)
-% converts an index to the corresponding sensitivity value for the SR830
-% lockin.
+% converts an index to the corresponding sensitivity value for the SR830 lockin
 x = [10e-6 30e-6];
 tauvals = [x 1e1*x 1e2*x 1e3*x 1e4*x 1e5*x 1e6*x 1e7*x 1e8*x 1e9*x];
 val = tauvals(tauindex+1);
 
 function tauindex = SR830tauindex(tauval)
-% converts a time constant to a corresponding index that can be sent to the
-% SR830 lockin.  rounds up (tau = 240 will become 300)
+% converts a time constant to a corresponding index that can be sent to the SR830 lockin
 x = [10e-6 30e-6];
 tauvals = [x 1e1*x 1e2*x 1e3*x 1e4*x 1e5*x 1e6*x 1e7*x 1e8*x 1e9*x];
-tauindex = find(tauvals >= tauval,1)-1;
+[~, tauvalsindex] = min(abs(tauvals - tauval));
+tauindex = tauvalsindex - 1;
         
