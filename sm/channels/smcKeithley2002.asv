@@ -14,7 +14,7 @@ switch ico(2)
 			otherwise
 				error('Operation not supported');
         end
-    case 2	% measure current
+    case 2	% measure voltage or set constant voltage source
 		switch ico(3)
 			case 0
                 fprintf(smdata.inst(ico(1)).data.inst, ':CONF:CURR:DC');
@@ -23,7 +23,8 @@ switch ico(2)
 			otherwise
 				error('Operation not supported');
         end
-      
+
+        
         
 	otherwise
 		%error('Operation not supported');
