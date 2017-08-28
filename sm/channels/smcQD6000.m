@@ -28,8 +28,10 @@ switch ico(2)
                 % should be: query(smdata.inst(ico(1)).data.inst, 'GETDAT? 1');
 				% not sure why has to be read twice, but the first time it yeilds the value of last message
 				% also not sure why TEMP comes through channel 2 instead of 1 as in manual
-				query(smdata.inst(ico(1)).data.inst, 'GETDAT? 2');
-                response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 2');
+% 				query(smdata.inst(ico(1)).data.inst, 'GETDAT? 2');
+%                 response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 2');
+                
+                response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 2\n');
 				parsed = sscanf(response, '%d,%f,%f;');
 				val = parsed(3);
             case 1 % set temperature
@@ -49,8 +51,10 @@ switch ico(2)
                 % should be: query(smdata.inst(ico(1)).data.inst, 'GETDAT? 2');
 				% not sure why has to be read twice, but the first time it yeilds the value of last message
 				% also not sure why TEMP comes through channel 4 instead of 2 as in manual
-				query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4');
-                response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4');
+% 				query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4');
+%                 response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4');
+                
+                response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4\n');
 				parsed = sscanf(response, '%d,%f,%f;');
 				val = parsed(3);
 %             case 1 % set persistent field
@@ -68,15 +72,18 @@ switch ico(2)
 				% should be: query(smdata.inst(ico(1)).data.inst, 'GETDAT? 2');
 				% not sure why has to be read twice, but the first time it yeilds the value of last message
 				% also not sure why TEMP comes through channel 4 instead of 2 as in manual
-				query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4');
-                response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4');
+% 				query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4');
+%                 response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4');
+                
+                response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4\n');
 				parsed = sscanf(response, '%d,%f,%f;');
 				val = parsed(3);
             case 1 % set driven field
                 if nargin < 3
                     rate = 190; %[Oe/s]
                 end
-                formatSpec = 'FIELD %.4f 190 0 1';
+%                 formatSpec = 'FIELD %.4f 190 0 1';
+                formatSpec = 'FIELD %.4f 20 0 1\n';
                 fprintf(smdata.inst(ico(1)).data.inst, formatSpec, val);
             otherwise
                 error('Operation not supported');
@@ -85,9 +92,11 @@ switch ico(2)
     case 4 % helium level (read-only)
         switch ico(3)
             case 0 % read helium level
-                % also appears to require reading twice
-                query(smdata.inst(ico(1)).data.inst, 'LEVEL?');
-                response = query(smdata.inst(ico(1)).data.inst, 'LEVEL?');
+%                 % also appears to require reading twice
+%                 query(smdata.inst(ico(1)).data.inst, 'LEVEL?');
+%                 response = query(smdata.inst(ico(1)).data.inst, 'LEVEL?');
+                
+                response = query(smdata.inst(ico(1)).data.inst, 'LEVEL?\n');
                 parsed = sscanf(response, '%f,%d;');
 				val = parsed(1);
             case 1
