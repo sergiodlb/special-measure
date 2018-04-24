@@ -18,7 +18,7 @@ function [val, rate] = smcKeithley2400(ico, val, rate)
 % 
 % edits by Sergio de la Barrera:
 % - added (6) measured RESISTANCE channel
-% - added (7) Get 2-wire/4-wire mode channel
+% - added (7) voltage RANGE channel ("VRANGE")
 
 global smdata;
 
@@ -152,20 +152,21 @@ switch ico(2)
                 
         end
 
-    case 7 % (added by Sergio) testing 2-wire/4-wire mode
-        switch ico(3)
-            case 0 % get value: 1=ON=4-wire mode, 0=OFF=2-wire mode
-                val = query(smdata.inst(ico(1)).data.inst,  'SYST:RSEN?', '%s\n', '%d');
-                
-            case 1
-                error('Set 2-wire/4-wire not implemented');
-            
-            otherwise
-                error('Operation not supported');
-                
+    case 7 % set or get source voltage range
+		switch ico(3)
+            case 0 % set range (Keithley selects minimum range inclusive of given value)
+                val = query(smdata.inst(ico(1)).data.inst,  ':SOUR:VOLT:RANG?', '%s\n', '%f');
+			case 1 % get present voltage source range
+				fprintf(smdata.inst(ico(1)).data.inst, ':SOUR:VOLT:RANGE %f', val);
+			otherwise
+				error('Operation not supported');
         end
 
 	otherwise
-		%error('Operation not supported');
+		% LIST OF OTHER COMMANDS (NOT IMPLEMENTED):
+        % get value: 1=ON=4-wire mode, 0=OFF=2-wire mode
+%         val = query(smdata.inst(ico(1)).data.inst,  'SYST:RSEN?', '%s\n', '%d');
+        % cancel remote; restore SourceMeter front panel operation
+%         fprintf(smdata.inst(ico(1)).data.inst, ':SYST:LOC');
 		error(['Channel ', num2str(ico(2)) ,' is not available']);
 end
