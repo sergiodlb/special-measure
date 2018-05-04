@@ -96,7 +96,7 @@ switch ico(2)
                 rate = parsed(2);
                 
                 % send T set point, using present ramp rate
-                scpi_msg = sprintf('FIELD %.4f $.4f 0 1\n', val, rate);
+                scpi_msg = sprintf('FIELD %.4f %.4f 0 1\n', val, rate);
                 fprintf(smdata.inst(ico(1)).data.inst, scpi_msg);
                 
 % %                 formatSpec = 'FIELD %.4f 190 0 1';
