@@ -156,6 +156,13 @@ switch ico(2)
                 scpi_msg = sprintf('FIELD %.4f %.4f 0 1\n', Bset, val);
                 fprintf(smdata.inst(ico(1)).data.inst, scpi_msg);
         end
+    case 7 % enter standby/shutdown mode (halts temperature controller and lowers He flow to minimum value)
+        switch ico(3)
+            case 1 % set standby mode
+                fprintf(smdata.inst(ico(1)).data.inst, 'SHUTDOWN\n');
+            otherwise
+                error('PPMS in STANDBY mode; set temperature to exit standby');
+        end
     otherwise
 		%error('Operation not supported');
 		error(['Channel ', num2str(ico(2)) ,' is not available']);
