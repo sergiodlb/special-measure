@@ -18,6 +18,9 @@ function [val, rate] = smcQD6000(ico, val, rate)
 % modified and extended by sergio@phys.cmu.edu
 % - smget(...) seems to work consistently now for temperature, field, and
 %   helium level; not sure why each must be read twice
+% 2018-05-23 quickfix while talking with Deva about smset + smget issue
+%            added double-query for both temperature and field GET conditions
+%            (both driven and persistent fields, although problem was only tested on driven channel)
 
 global smdata;
 
@@ -29,8 +32,8 @@ switch ico(2)
 				% not sure why has to be read twice, but the first time it yeilds the value of last message
 				% also not sure why TEMP comes through channel 2 instead of 1 as in manual
 % 				query(smdata.inst(ico(1)).data.inst, 'GETDAT? 2');
-%                 response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 2');
-                
+
+                response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 2\n'); % quick fix applied on 2018-05-23
                 response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 2\n');
 				parsed = sscanf(response, '%d,%f,%f;');
 				val = parsed(3);
@@ -59,8 +62,8 @@ switch ico(2)
 				% not sure why has to be read twice, but the first time it yeilds the value of last message
 				% also not sure why TEMP comes through channel 4 instead of 2 as in manual
 % 				query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4');
-%                 response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4');
                 
+                response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4\n'); % quick fix applied on 2018-05-23
                 response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4\n');
 				parsed = sscanf(response, '%d,%f,%f;');
 				val = parsed(3);
@@ -80,8 +83,8 @@ switch ico(2)
 				% not sure why has to be read twice, but the first time it yeilds the value of last message
 				% also not sure why TEMP comes through channel 4 instead of 2 as in manual
 % 				query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4');
-%                 response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4');
                 
+                response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4\n'); % quick fix applied on 2018-05-23
                 response = query(smdata.inst(ico(1)).data.inst, 'GETDAT? 4\n');
 				parsed = sscanf(response, '%d,%f,%f;');
 				val = parsed(3);
