@@ -8,13 +8,14 @@ function [val, rate] = smcSR860(ic, val, rate, ctrl)
 % 17: sensitivity
 % 18: time constant
 % 19: sync filter on/off
-% (added by Sergio) 20: "snap" get X, Y simultaneously, returns 'X, Y'
+% (added by Sergio) 20: "SNAP" --> get X, Y simultaneously, returns 'X, Y'
+% (added by Sergio) 21: "SOFF" --> set or get DC output level
 
 global smdata;
 
 cmds = {'OUTP 0', 'OUTP 1', 'OUTP 2', 'OUTP 3', 'FREQ', 'SLVL', ...
     'OAUX 1', 'OAUX 2', 'OAUX 3', 'OAUX 4', 'AUXV 1', 'AUXV 2', 'AUXV 3', 'AUXV 4' ...
-    ,'','','SCAL', 'OFLT', 'SYNC', 'SNAP 0,1'};
+    ,'','','SCAL', 'OFLT', 'SYNC', 'SNAP 0,1', 'SOFF'};
 
 switch ic(2) % Channel
     case {15, 16} % stored data, length determined by datadim
