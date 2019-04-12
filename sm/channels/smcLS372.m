@@ -10,6 +10,13 @@ switch ico(2) % channel
         switch ico(3)
 			case 0 % get: returns temperature in Kelvin and ignores error (part after second +/- sign)
                 val = query(smdata.inst(ico(1)).data.inst, sprintf('RDGK? %d', ico(2)), '%s\n', '%f');
+                if ~isscalar(val) % if LS372 returns [48    57    44    48    13    10] or other array
+                    cprintf('red', 'Warning: GPIB read error --> %s\n', val);
+                    val = nan;
+                elseif isempty(val) % if LS372 returns []
+                    cprintf('red', 'Warning: GPIB read error --> []\n');
+                    val = nan;
+                end
 			otherwise
 				error('Operation not supported');
         end
