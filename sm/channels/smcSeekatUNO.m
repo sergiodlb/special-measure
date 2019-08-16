@@ -70,12 +70,14 @@ switch ico(2)
                 end
                 
                 try % hack to avoid error from especially small numbers
-                    bin16 = de2bi(dec16,16,2,'left-msb'); %16 bit binary
-                    d1=bi2de(fliplr(bin16(1:8))); %first 8 bits
-                    d2=bi2de(fliplr(bin16(9:16))); %second 8 bits
-                    % disp([255,254,253,n1,d1*m1,d2*m1,n2,d1*m2,d2*m2]); %uncomment to check what’s being sent to the Arduino
-                    pause(.005);
+                    bin16 = de2bi(dec16,16,2,'left-msb'); % 16 bit binary
+                    d1=bi2de(fliplr(bin16(1:8))); % first 8 bits
+                    d2=bi2de(fliplr(bin16(9:16))); % second 8 bits
+%                     disp([255,254,253,n1,d1*m1,d2*m1,n2,d1*m2,d2*m2]); % uncomment to check what’s being sent to the Arduino
+                    
+                    pause(.005); % why pause here?
                     fwrite(smdata.inst(ico(1)).data.inst,[255,254,253,n1,d1*m1,d2*m1,n2,d1*m2,d2*m2]);
+                    
                     while smdata.inst(ico(1)).data.inst.BytesAvailable
                         fscanf(smdata.inst(ico(1)).data.inst,'%e');
                     end
