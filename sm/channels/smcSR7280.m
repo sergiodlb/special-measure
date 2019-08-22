@@ -8,20 +8,21 @@ cmds = {'X.', % measure X channel in volts or amps
         'Y.', % measure Y channel in volts or amps
         'MAG.', % measure magnitude of X+iY in volts or amps
         'PHA.', % measure phase of X+iY in degrees
+        'FRQ.', % zero if unlocked, reference frequency in Hz if locked
 %         'XY.', % measure X and Y channels in volts or amps
         'OA.', % output amplitude
         'OF.', % internal oscillator frequency
         };
 
 switch ico(2)
-    case num2cell(1:4) % get-only commands
+    case num2cell(1:5) % get-only commands
 		switch ico(3)
 			case 0
                 val = query(smdata.inst(ico(1)).data.inst, cmds{ico(2)}, '%s\n', '%f');
 			otherwise
 				error('Operation not supported');
         end
-    case num2cell(5:6) % set-or-get commands
+    case num2cell(6:7) % set-or-get commands
 		switch ico(3)
 			case 0
                 val = query(smdata.inst(ico(1)).data.inst, cmds{ico(2)}, '%s\n', '%f');
@@ -29,7 +30,7 @@ switch ico(2)
                 fprintf(smdata.inst(ico(1)).data.inst, sprintf('%s %f', cmds{ico(2)}, val));
                 spoll(smdata.inst(ico(1)).data.inst); % this is required for clearing the status byte from the register before the next command
         end
-    case 7 % full-scale sensitivity (unit depends on voltage/current mode)
+    case 8 % full-scale sensitivity (unit depends on voltage/current mode)
         switch ico(3)
 			case 0 % can query directly
                 val = query(smdata.inst(ico(1)).data.inst, 'SEN.', '%s\n', '%f');
@@ -38,7 +39,7 @@ switch ico(2)
                 fprintf(smdata.inst(ico(1)).data.inst, sprintf('SEN %d', idx));
                 spoll(smdata.inst(ico(1)).data.inst); % this is required for clearing the status byte from the register before the next command
         end
-    case 8 % perform auto-sensitivity operation
+    case 9 % perform auto-sensitivity operation
         switch ico(3)
 			case 0
                 error('Use SET only');
@@ -46,7 +47,7 @@ switch ico(2)
                 fprintf(smdata.inst(ico(1)).data.inst, 'AS');
                 spoll(smdata.inst(ico(1)).data.inst); % this is required for clearing the status byte from the register before the next command
         end
-    case 9 % AC gain control
+    case 10 % AC gain control
         switch ico(3)
 			case 0
                 idx = query(smdata.inst(ico(1)).data.inst, 'ACGAIN', '%s\n', '%d');
@@ -56,7 +57,7 @@ switch ico(2)
                 fprintf(smdata.inst(ico(1)).data.inst, sprintf('ACGAIN %d', idx));
                 spoll(smdata.inst(ico(1)).data.inst); % this is required for clearing the status byte from the register before the next command
         end
-    case 10 % time constant
+    case 11 % time constant
         switch ico(3)
 			case 0  % can query directly
                 val = query(smdata.inst(ico(1)).data.inst, 'TC.', '%s\n', '%f');
@@ -65,7 +66,7 @@ switch ico(2)
                 fprintf(smdata.inst(ico(1)).data.inst, sprintf('TC %d', idx));
                 spoll(smdata.inst(ico(1)).data.inst); % this is required for clearing the status byte from the register before the next command
         end
-    case 11 % toggle INT/EXT reference
+    case 12 % toggle INT/EXT reference
         switch ico(3)
 			case 0 % query
                 val = query(smdata.inst(ico(1)).data.inst, 'IE', '%s\n', '%d');
