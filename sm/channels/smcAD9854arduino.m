@@ -32,7 +32,7 @@ if ico(3) == 1 % only SET operations are supported
             PTW = de2bi(floor(mod(val, 360)/360*2^Nphase), 16, endianness);
             pw1 = bi2de(PTW(1:8), endianness);
             pw2 = bi2de(PTW(9:16), endianness);
-            if ico(3) == 2 % apply shift to chip 1
+            if ico(2) == 2 % apply shift to chip 1
                 fwrite(ac_box, [255, 254, 253, 1, 0, pw1, pw2, 0, 0, 0, 0]);
             else % apply shift to chip 2
                 fwrite(ac_box, [255, 254, 253, 2, 0, pw1, pw2, 0, 0, 0, 0]);
